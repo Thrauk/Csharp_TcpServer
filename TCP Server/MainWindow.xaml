@@ -24,7 +24,7 @@
         <Button x:Name="button" Content="Clear log" HorizontalAlignment="Left" Margin="700,15,0,0" VerticalAlignment="Top" Width="75" Height="22" Click="Clear_Log_Button_Click"/>
         <ListView x:Name="connectedClients" HorizontalAlignment="Left" Height="290" Margin="622,119,0,0" VerticalAlignment="Top" Width="155" SelectionMode="Single">
         </ListView>
-        <Button x:Name="button1" Content="Edit" HorizontalAlignment="Left" Margin="620,93,0,0" VerticalAlignment="Top" Width="75" Height="21"/>
+        <Button x:Name="subscribeButton" Content="Subscribe" HorizontalAlignment="Left" Margin="620,93,0,0" VerticalAlignment="Top" Width="75" Height="21" IsEnabled="False" Click="SubscribeButton_Click"/>
         <Button x:Name="disconnectClientButton" Content="Disconnect" HorizontalAlignment="Left" Margin="700,93,0,0" VerticalAlignment="Top" Width="75" Height="21" Click="DisconnectClientButton_Click" IsEnabled="False"/>
         <Button x:Name="sendButton" Content="Send menu" HorizontalAlignment="Left" Margin="620,42,0,0" VerticalAlignment="Top" Width="155" Click="Send_Menu_Button_Click" Height="23" IsEnabled="False"/>
         <Label x:Name="label1" Content="Connected clients" HorizontalAlignment="Left" Margin="622,67,0,0" VerticalAlignment="Top" FontFamily="Courier New" FontSize="14"/>

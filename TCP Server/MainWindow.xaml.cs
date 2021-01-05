@@ -50,6 +50,7 @@ namespace TCP_Server
             startButton.IsEnabled = false;
             stopButton.IsEnabled = true;
             sendButton.IsEnabled = true;
+            subscribeButton.IsEnabled = true;
             disconnectClientButton.IsEnabled = true;
             //myServer.StartUpdate(richTextBox);
 
@@ -57,21 +58,28 @@ namespace TCP_Server
 
         private void Stop_Button_Click(object sender, RoutedEventArgs e)
         {
-            lock(stopLock)
-            {
-                myServer.StopServer();
-            }
-            
+            Closing_Routine();
+
             startButton.IsEnabled = true;
             stopButton.IsEnabled = false;
             sendButton.IsEnabled = false;
+            subscribeButton.IsEnabled = false;
             disconnectClientButton.IsEnabled = false;
             UpdateRichTextBox("Server closed!\r");
+            //myServer.StartUpdate(richTextBox);
+
+        }
+
+
+        private void Closing_Routine()
+        {
+            lock (stopLock)
+            {
+                myServer.StopServer();
+            }
             Thread.Sleep(25);
             updateThread.Abort();
             SendMenuClose();
-            //myServer.StartUpdate(richTextBox);
-
         }
 
 
@@ -162,13 +170,16 @@ namespace TCP_Server
 
         public void SendMenuClose()
         {
-            sendMenuWindow.CloseWindow();
-            sendMenuWindow = null;
+            if (sendMenuWindow != null)
+            {
+                sendMenuWindow.CloseWindow();
+                sendMenuWindow = null;
+            }
         }
 
-        public void SendMessageToClient(String ip, String message)
+        public void SendMessageToClientIp(String ip, String message)
         {
-            this.myServer.SendStringToClient(ip, message);
+            this.myServer.SendStringToClientIp(ip, message);
         }
 
         public void AddToMessageList(string message)
@@ -182,5 +193,19 @@ namespace TCP_Server
             return this.connectedClients;
         }
 
+        private void SubscribeButton_Click(object sender, RoutedEventArgs e)
+        {  
+            if (connectedClients.Items.Count != 0)
+            {
+                if (connectedClients.SelectedItems.Count == 1)
+                    myServer.AddSubscriber(connectedClients.SelectedItem.ToString());
+                else
+                    MessageBox.Show("No client selected", "Error");
+            }
+            else
+            {
+                MessageBox.Show("No client connected", "Error");
+            }
+        }
     }
 }

@@ -23,6 +23,7 @@ namespace TCP_Server
         private MainWindow mainWindowReference;
         private ListView mainWindowConnectedClients;
         private Thread updateThread;
+        private string transmissionMode="Unicast";
         public SendMenu()
         {
             InitializeComponent();
@@ -72,7 +73,7 @@ namespace TCP_Server
                     }
                 }
             }
-           
+
         }
 
         private MainWindow GetMainWindow()
@@ -97,35 +98,74 @@ namespace TCP_Server
         {
             connectedClients.IsEnabled = true;
             connectedClients.SelectionMode = SelectionMode.Single;
+            transmissionMode = "Unicast";
         }
 
         private void MulticastButton_Checked(object sender, RoutedEventArgs e)
         {
             connectedClients.IsEnabled = true;
             connectedClients.SelectionMode = SelectionMode.Multiple;
+            transmissionMode = "Multicast";
         }
 
         private void BroadcastButton_Checked(object sender, RoutedEventArgs e)
         {
             connectedClients.UnselectAll();
             connectedClients.IsEnabled = false;
+            transmissionMode = "Broadcast";
+        }
+
+        private void UnicastSend(string message)
+        {
+            mainWindowReference.SendMessageToClientIp(connectedClients.SelectedItem.ToString(), message);
+            //mainWindowReference.AddToMessageList(message);
+        }
+
+        private void MulticastSend(string message)
+        {
+            foreach (string ip in connectedClients.SelectedItems)
+            {
+                mainWindowReference.SendMessageToClientIp(ip, message);
+                //mainWindowReference.AddToMessageList(message);
+            }
+        }
+
+        private void BroadcastSend(string message)
+        {
+            foreach (string ip in connectedClients.Items)
+            {
+                mainWindowReference.SendMessageToClientIp(ip, message);
+                //mainWindowReference.AddToMessageList(message);
+            }
         }
 
         private void SendMsgButton_Click(object sender, RoutedEventArgs e)
         {
-            String message = textBox.Text;
+            string message = textBox.Text;
             if (connectedClients.Items.Count != 0)
             {
-                if (connectedClients.SelectedItems.Count == 1)
-                    if (message.Length > 0)
+                if (message.Length > 0)
+                {
+                    if (transmissionMode.Equals("Broadcast"))
                     {
-                        mainWindowReference.SendMessageToClient(connectedClients.SelectedItem.ToString(), message);
-                        mainWindowReference.AddToMessageList(message);
+                        BroadcastSend(message);
+                    }
+                    else if (connectedClients.SelectedItems.Count != 0)
+                    {
+                        if (transmissionMode.Equals("Unicast"))
+                        {
+                            UnicastSend(message);
+                        }
+                        else if (transmissionMode.Equals("Multicast"))
+                        {
+                            MulticastSend(message);
+                        }
                     }
                     else
-                        MessageBox.Show("Message to send cannot be empty!", "Error");
+                        MessageBox.Show("No client selected", "Error");
+                }
                 else
-                    MessageBox.Show("No client selected", "Error");
+                    MessageBox.Show("Message to send cannot be empty!", "Error");
             }
             else
             {

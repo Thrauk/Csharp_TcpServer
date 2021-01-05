@@ -56,10 +56,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ClientTcp.cs" />
+    <Compile Include="Message.cs" />
     <Compile Include="SendMenu.xaml.cs">
       <DependentUpon>SendMenu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TcpLegacy.cs" />
     <Compile Include="TcpServer.cs" />
+    <Compile Include="TcpServerOperations.cs" />
+    <Compile Include="TcpThreads.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
