@@ -9,6 +9,7 @@ namespace TCP_Server.TCP_Client.Classes.Services.Status.Conditions
     abstract class StatusCondition
     {
         protected readonly Client client;
+        //TEST
 
         public StatusCondition(Client client)
         {
