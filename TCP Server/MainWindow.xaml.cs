@@ -27,7 +27,7 @@ namespace TCP_Server
         public delegate void clientDelegate(List<string> ips);
 
         private int connectedClientsCount;
-        TcpServer myServer;
+        TCP_Server_Files.Classes.TcpServer myServer;
         Thread updateThread;
         SendMenu sendMenuWindow = null;
 
@@ -41,10 +41,20 @@ namespace TCP_Server
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            String ip = serverIp.Text;
-            String port = serverPort.Text;
+            string ip = "192.168.0.45";
+            int port = 11000;
+            /*
             myServer = new TcpServer(ip,port);
             myServer.StartServer();
+            updateThread = new Thread((new ThreadStart(UpdateUIThread)));
+            updateThread.Start();
+            startButton.IsEnabled = false;
+            stopButton.IsEnabled = true;
+            sendButton.IsEnabled = true;
+            subscribeButton.IsEnabled = true;
+            disconnectClientButton.IsEnabled = true;*/
+            myServer = new TCP_Server_Files.Classes.TcpServer(ip, port);
+            myServer.connectionManager.StartServer();
             updateThread = new Thread((new ThreadStart(UpdateUIThread)));
             updateThread.Start();
             startButton.IsEnabled = false;
@@ -75,7 +85,7 @@ namespace TCP_Server
         {
             lock (stopLock)
             {
-                myServer.StopServer();
+                myServer.connectionManager.StopServer();
             }
             Thread.Sleep(25);
             updateThread.Abort();
@@ -86,29 +96,29 @@ namespace TCP_Server
 
         private void UpdateUIThread()
         {
-            while(true)
+            while (true)
             {
                 rtbDelegate updateRtb = new rtbDelegate(UpdateRichTextBox);
                 clientDelegate updateList = new clientDelegate(AddToConnectedClient);
                 Thread.Sleep(50);
-                string message = myServer.getMessage();
-                List<string> ipAddresses = myServer.GetClientsIps();
-                if (message != null)
+                string message = myServer.GetMessage();
+                List<string> ipAddresses = TCP_Server_Files.Classes.Operations.ClientOperations.GetClientsIps();
+                if (message != null && message.Count() > 0)
                 {
-                        Dispatcher.Invoke(() =>
+                    Dispatcher.Invoke(() =>
                     {
                         richTextBox.AppendText(message + '\r');
                         richTextBox.ScrollToEnd();
                     }
-                     );
+                 );
                 }
-                if(ipAddresses.Count() != connectedClientsCount)
+                if (ipAddresses.Count() != connectedClientsCount)
                 {
                     connectedClientsCount = ipAddresses.Count();
                     Dispatcher.Invoke(() =>
                     {
                         connectedClients.Items.Clear();
-                        if(ipAddresses.Count() != 0)
+                        if (ipAddresses.Count() != 0)
                             foreach (string ip in ipAddresses)
                                 this.connectedClients.Items.Add(ip);
                     }
@@ -121,7 +131,7 @@ namespace TCP_Server
         public void AddToConnectedClient(List<string> ips)
         {
             connectedClients.Items.Clear();
-            foreach(string ip in ips)
+            foreach (string ip in ips)
                 this.connectedClients.Items.Add(ip);
         }
 
@@ -137,10 +147,10 @@ namespace TCP_Server
 
         private void DisconnectClientButton_Click(object sender, RoutedEventArgs e)
         {
-            if(connectedClients.Items.Count != 0)
+            if (connectedClients.Items.Count != 0)
             {
-                if(connectedClients.SelectedItems.Count == 1)
-                    myServer.DisconnectClient(connectedClients.SelectedItem.ToString());
+                if (connectedClients.SelectedItems.Count == 1)
+                    TCP_Server_Files.Classes.Operations.ClientOperations.DisconnectClientByIp(connectedClients.SelectedItem.ToString());
                 else
                     MessageBox.Show("No client selected", "Error");
             }
@@ -179,7 +189,7 @@ namespace TCP_Server
 
         public void SendMessageToClientIp(String ip, String message)
         {
-            this.myServer.SendStringToClientIp(ip, message);
+            TCP_Server_Files.Classes.Operations.ClientOperations.SendStringToClientIp(ip, message);
         }
 
         public void AddToMessageList(string message)
@@ -194,18 +204,29 @@ namespace TCP_Server
         }
 
         private void SubscribeButton_Click(object sender, RoutedEventArgs e)
-        {  
+        {
+            /*bool response;
             if (connectedClients.Items.Count != 0)
             {
                 if (connectedClients.SelectedItems.Count == 1)
-                    myServer.AddSubscriber(connectedClients.SelectedItem.ToString());
+                {
+                    response = myServer.AddSubscriber(connectedClients.SelectedItem.ToString());
+                    if(response)
+                    {
+                        MessageBox.Show("Client subscribed successfully!", "Success");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Client is already a subscriber!", "Error");
+                    }
+                }
                 else
                     MessageBox.Show("No client selected", "Error");
             }
             else
             {
                 MessageBox.Show("No client connected", "Error");
-            }
+            }*/
         }
     }
 }

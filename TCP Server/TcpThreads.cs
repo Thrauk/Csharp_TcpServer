@@ -152,22 +152,23 @@ namespace TCP_Server
         private void ResponseThread()
         {
             byte[] message;
+            string messageToWrite;
             while (true)
             {
                 if (messageCommandList.Count > 0)
                 {
-                    if (demoDevices.Count == 0)
-                    {
-                        messageCommandList.Dequeue();
-                    }
-                    else
+                    messageToWrite = messageCommandList.Dequeue();
+                    if (clientsQueue.Count != 0)
                     {
                         try
                         {
-                            foreach (ClientTcp client in demoDevices)
+                            foreach (ClientTcp client in clientsQueue)
                             {
-                                message = System.Text.Encoding.ASCII.GetBytes(messageCommandList.Dequeue());
-                                client.GetStream().Write(message, 0, message.Length);
+                                if (client.IsSubscriber())
+                                {
+                                    message = System.Text.Encoding.ASCII.GetBytes(messageToWrite);
+                                    client.GetStream().Write(message, 0, message.Length);
+                                }
                             }
                         }
                         catch (Exception) { }

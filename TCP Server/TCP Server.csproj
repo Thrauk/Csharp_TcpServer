@@ -60,6 +60,32 @@
     <Compile Include="SendMenu.xaml.cs">
       <DependentUpon>SendMenu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TCP Client\Classes\Clients\ArduinoClient.cs" />
+    <Compile Include="TCP Client\Classes\Clients\Client.cs" />
+    <Compile Include="TCP Client\Classes\Clients\GenericClient.cs" />
+    <Compile Include="TCP Client\Classes\Clients\UnknownClient.cs" />
+    <Compile Include="TCP Client\Classes\Services\ClientAssigner\ClientAssigner.cs" />
+    <Compile Include="TCP Client\Classes\Services\ConnectionManager\ConnectionManager.cs" />
+    <Compile Include="TCP Client\Classes\Services\ConnectionManager\GenericConnectionManager.cs" />
+    <Compile Include="TCP Client\Classes\Services\Reciever\DataReciever.cs" />
+    <Compile Include="TCP Client\Classes\Services\Sender\DataSender.cs" />
+    <Compile Include="TCP Client\Classes\Services\Sender\GenericDataSender.cs" />
+    <Compile Include="TCP Client\Classes\Services\Status\Conditions\Heartbeat.cs" />
+    <Compile Include="TCP Client\Classes\Services\Status\Conditions\StatusCondition.cs" />
+    <Compile Include="TCP Client\Classes\Services\Status\Manager\ArduinoStatusManager.cs" />
+    <Compile Include="TCP Client\Classes\Services\Status\Manager\GenericStatusManager.cs" />
+    <Compile Include="TCP Client\Classes\Services\Status\Manager\StatusManager.cs" />
+    <Compile Include="TCP Client\Classes\Threads\ClientRecieveDataThread.cs" />
+    <Compile Include="TCP Client\Classes\Threads\ClientThread.cs" />
+    <Compile Include="TCP Client\Interfaces\I_ClientFeature.cs" />
+    <Compile Include="TCP Client\Interfaces\I_ClientInterface.cs" />
+    <Compile Include="TCP Server Files\Classes\Services\ConnectionManager.cs" />
+    <Compile Include="TCP Server Files\Classes\Services\ThreadManager.cs" />
+    <Compile Include="TCP Server Files\Classes\TcpServer.cs" />
+    <Compile Include="TCP Server Files\Classes\Threads\CheckClientStatusThread.cs" />
+    <Compile Include="TCP Server Files\Classes\Threads\ServerThread.cs" />
+    <Compile Include="TCP Server Files\Classes\Threads\ServerWaitClientsThread.cs" />
+    <Compile Include="TCP Server Files\Operations\ClientOperations.cs" />
     <Compile Include="TcpLegacy.cs" />
     <Compile Include="TcpServer.cs" />
     <Compile Include="TcpServerOperations.cs" />
@@ -108,6 +134,9 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TCP Server Files\Classes\Commands\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

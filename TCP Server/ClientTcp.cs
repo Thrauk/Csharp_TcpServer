@@ -15,6 +15,7 @@ namespace TCP_Server
         private NetworkStream stream = null;
         private int clientId;
         private string ipAddress;
+        private string type = "default";
         private DateTime lastRecievedMessageTime;
         private bool connectionStarted = false;
         private readonly object abortLock = new object();
@@ -37,6 +38,12 @@ namespace TCP_Server
                 if (stream != null)
                     this.stream.Close();
             }
+        }
+
+        public void SendMessage(string message)
+        {
+            byte[] messageByte = Encoding.ASCII.GetBytes(message);
+            stream.Write(messageByte, 0, messageByte.Length);
         }
 
         public void SetNetworkStream(NetworkStream stream)
@@ -107,6 +114,21 @@ namespace TCP_Server
         public object GetAliveLock()
         {
             return clientAliveLock;
+        }
+
+        public void SetSubscriber()
+        {
+            type = "subscriber";
+        }
+
+        public void RemoveSubscriber()
+        {
+            type = "default";
+        }
+
+        public bool IsSubscriber()
+        {
+            return type.Equals("subscriber");
         }
     }
 }

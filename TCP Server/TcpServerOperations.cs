@@ -19,12 +19,24 @@ namespace TCP_Server
             return clientsQueue.First(el => el.GetIp() == ip);
         }
 
-        public void AddSubscriber(string ip)
+        public bool AddSubscriber(string ip)
         {
-            demoDevices.Enqueue(GetClientByIp(ip));
+            ClientTcp client = GetClientByIp(ip);
+            /*if (!demoDevices.Contains(client))
+            {
+                demoDevices.Enqueue(client);
+                return true;
+            }*/
+            if(client.IsSubscriber() == false)
+            {
+                client.SetSubscriber();
+                client.SendMessage("Subscribed");
+                return true;
+            }
+            return false;
         }
 
-        public void DisconnectClient(String ip)
+        public void DisconnectClientByIp(String ip)
         {
             //ClientTcp client = clientsList.First(el => el.GetIp() == ip);
             ClientTcp client = clientsQueue.First(el => el.GetIp() == ip);
