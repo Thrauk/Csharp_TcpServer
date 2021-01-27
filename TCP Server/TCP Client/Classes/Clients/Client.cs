@@ -46,7 +46,7 @@ namespace TCP_Server.TCP_Client.Classes
             this.clientId = TCP_Server_Files.Classes.Operations.ClientOperations.NextClientId(); 
             this.clientListener = clientListener;
             ipAddress = clientListener.Client.RemoteEndPoint.ToString();
-            dataSender = new GenericDataSender(stream);
+            dataSender = new GenericDataSender(this);
             connectionManager = new GenericConnectionManager(this);
             recieveDataThread = new ClientRecieveDataThread(this);
             statusManager = new GenericStatusManager(this);

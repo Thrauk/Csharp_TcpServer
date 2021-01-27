@@ -10,16 +10,26 @@ namespace TCP_Server.TCP_Client.Classes.Services
     abstract class DataSender
     {
         protected readonly NetworkStream stream;
+        protected readonly Client client;
 
-        protected DataSender(NetworkStream stream)
+
+        protected string acknowledgeMessage = "ACK";
+
+        protected DataSender(Client client)
         {
-            this.stream = stream;
+            this.client = client;
         }
 
         protected byte[] StringToByte(string message)
         {
             return Encoding.ASCII.GetBytes(message);
         }
+
+        public void SendAcknowledge()
+        {
+            SendMessage(acknowledgeMessage);
+        }
+
 
         public abstract void SendMessage(byte[] message);
 

@@ -26,6 +26,7 @@ namespace TCP_Server.TCP_Client.Classes.Threads
                 message = DataReciever.ReadData(client);
                 //SEND DATA TO SERVER
                 TCP_Server_Files.Classes.TcpServer.activeServer.AddMessage(message);
+                client.dataSender.SendAcknowledge();
             }
         }
 

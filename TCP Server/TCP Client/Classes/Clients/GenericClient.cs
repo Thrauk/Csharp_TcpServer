@@ -13,7 +13,7 @@ namespace TCP_Server.TCP_Client.Classes.Clients
     {
         public GenericClient(TcpClient clientListener) : base(clientListener)
         {
-            dataSender = new GenericDataSender(stream);
+            dataSender = new GenericDataSender(this);
         }
     }
 }

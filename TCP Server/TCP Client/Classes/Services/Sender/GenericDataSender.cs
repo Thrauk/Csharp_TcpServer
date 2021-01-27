@@ -10,13 +10,14 @@ namespace TCP_Server.TCP_Client.Classes.Services
     class GenericDataSender : DataSender
     {
         
-        public GenericDataSender(NetworkStream stream):base(stream)
+        public GenericDataSender(Client client):base(client)
         {
+            acknowledgeMessage = "ACK_Gen";
         }
 
         public override void SendMessage(byte[] message)
         {
-            stream.Write(message, 0, message.Length);
+            client.GetClientStream().Write(message, 0, message.Length);
         }
 
         public override void SendMessage(string message)

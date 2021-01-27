@@ -14,7 +14,7 @@ namespace TCP_Server.Client.Classes
         public ArduinoClient(TcpClient clientListener) :
             base(clientListener)
         {
-            dataSender = new GenericDataSender(stream);
+            dataSender = new GenericDataSender(this);
         }
     }
 }
